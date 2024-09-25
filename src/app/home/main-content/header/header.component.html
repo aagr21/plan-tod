@@ -1,0 +1,22 @@
+<!-- Barra superior -->
+<mat-toolbar color="primary" class="toolbar">
+  @if(currentDirectory) {
+    <button mat-icon-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  }
+  
+  <span class="spacer"></span>
+  <span>Plan TOD</span>
+  <span class="spacer"></span>
+  <button mat-icon-button aria-label="Search">
+    <mat-icon>search</mat-icon>
+  </button>
+  &nbsp; &nbsp;
+  <button mat-icon-button aria-label="Settings" [matMenuTriggerFor]="menu">
+    <mat-icon>settings</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="singOut()">Cerrar Sesión</button>
+  </mat-menu>
+</mat-toolbar>

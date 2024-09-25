@@ -1,0 +1,30 @@
+<app-header />
+
+<!-- Lista de archivos -->
+<div class="file-list-container">
+  <div class="{{ isSmallScreen ? 'grid grid-cols-2' : 'grid grid-cols-3' }} gap-2 mx-10 py-5">
+    @if(currentDirectory) {
+      @for(directory of currentDirectory.children; track directory) {
+        <mat-card class="file-card select-none mx-9 my-2" (click)="!directory.isFile ? changeCurrentDirectory(directory) : viewFile(directory)">
+          <mat-card-content>
+            <div class="flex items-center">
+              <mat-icon>{{ directory.isFile ? 'picture_as_pdf' : 'folder' }}</mat-icon>&nbsp;
+              <span class="{{ directory.isFile ? 'truncate-text' : '' }}">{{ directory.name }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    } @else {
+      @for(directory of allDirectories; track directory) {
+        <mat-card class="file-card select-none mx-9 my-2" (click)="!directory.isFile ? changeCurrentDirectory(directory) : viewFile(directory)">
+          <mat-card-content>
+            <div class="flex items-center">
+              <mat-icon>{{ directory.isFile ? 'picture_as_pdf' : 'folder' }}</mat-icon>&nbsp;
+              <span class="{{ directory.isFile ? 'truncate-text' : '' }}">{{ directory.name }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    }
+  </div>
+</div>

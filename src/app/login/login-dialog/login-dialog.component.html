@@ -1,0 +1,32 @@
+<mat-dialog-content>
+  <p class="text-center">Ingrese su contraseña para acceder al sistema</p>
+  <div class="mt-4">
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Contraseña</mat-label>
+      <input
+        matInput
+        placeholder="Ingrese su contraseña"
+        (keydown)="onKey($event)"
+        [formControl]="passwordControl"
+      />
+    </mat-form-field>
+  </div>
+  <div class="center margin mt-2">
+    @if (isLoading) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    } @else {
+    <div class="text-center">
+      <button
+        #myButton
+        class="unselectable"
+        mat-flat-button
+        type="submit"
+        [disabled]="passwordControl.value?.length === 0"
+        (click)="signIn()"
+      >
+        Acceder
+      </button>
+    </div>
+    }
+  </div>
+</mat-dialog-content>

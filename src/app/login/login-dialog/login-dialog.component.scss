@@ -1,0 +1,31 @@
+body {
+  padding: 20px;
+  margin: 0;
+  box-sizing: border-box;
+  color: #707070;
+}
+span.field-icon {
+  float: right;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.unselectable {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+*::ng-deep .mdc-notched-outline__notch {
+  border-right: none !important;
+}

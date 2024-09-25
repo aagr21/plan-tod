@@ -1,0 +1,58 @@
+/* Contenedor de la lista de archivos */
+.file-list-container {
+  background-color: #f1f3f4;
+  min-height: calc(100vh - 64px); /* Ajuste para la altura */
+}
+
+/* Estilo para los archivos (tarjetas) */
+.file-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px;
+  transition: box-shadow 0.3s, transform 0.3s;
+  cursor: pointer;
+  height: 130px;
+  width: 300px;
+}
+
+/* Efecto hover para las tarjetas de archivos */
+.file-card:hover {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); /* Sombra en hover */
+  transform: translateY(-12px); /* Efecto de levitación */
+}
+
+/* Flex para ícono y texto */
+.flex.items-center {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden; /* Evita que el contenido sobrepase el card */
+}
+
+/* Ajusta el espacio entre icono y texto */
+mat-icon {
+  margin-right: 8px;
+  flex-shrink: 0; /* Asegura que el icono no se reduzca */
+}
+
+/* Truncado de texto para hasta 3 líneas */
+.truncate-text {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical; 
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .file-card {
+    width: 100px;
+    min-width: 100px;
+  }
+}
