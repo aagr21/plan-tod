@@ -45,14 +45,23 @@ mat-icon {
   display: -webkit-box;
   -webkit-line-clamp: 4;
   line-clamp: 4;
-  -webkit-box-orient: vertical; 
+  -webkit-box-orient: vertical;
   font-size: 13px;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
   .file-card {
-    width: 100px;
-    min-width: 100px;
+    height: 100px;
+    width: 280px;
+  }
+
+  .truncate-text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    font-size: 10px;
   }
 }
