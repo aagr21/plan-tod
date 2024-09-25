@@ -44,13 +44,7 @@ export class DirectoriesService {
       this._pathCurrentDirectoryBS.next(undefined!);
       return;
     }
-    if (!this._pathCurrentDirectoryBS.getValue()) {
-      this._pathCurrentDirectoryBS.next(currentDirectory.name);
-    } else {
-      this._pathCurrentDirectoryBS.next(
-        `${this._pathCurrentDirectoryBS.getValue()}/${currentDirectory.name}`
-      );
-    }
+    this._pathCurrentDirectoryBS.next(currentDirectory.name);
   }
 
   private _listNavigateDirectoriesBS = new BehaviorSubject<Directory[]>([]);
