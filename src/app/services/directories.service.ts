@@ -19,6 +19,10 @@ export class DirectoriesService {
     return this._currentDirectoryBS.getValue();
   }
 
+  setCurrentDirectory(directory: Directory) {
+    this._currentDirectoryBS.next(undefined!);
+  }
+
   setCurrentDirectoryChild(currentDirectory: Directory) {
     this._listNavigateDirectoriesBS.next([
       ...this._listNavigateDirectoriesBS.getValue(),
