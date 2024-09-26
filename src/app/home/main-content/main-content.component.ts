@@ -5,19 +5,24 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HeaderComponent } from './header/header.component';
 import { Subscription } from 'rxjs';
-import { Directory } from '@models/interfaces';
+import { Directory, DecodedToken } from '@models/interfaces';
 import { DirectoriesService } from '@services/directories.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { AccessedFilesLogsService } from '@services/accessed-files-logs.service';
 import { publicIpv4 } from 'public-ip';
 import { AuthService } from '@services/auth.service';
-import { DecodedToken } from '@models/interfaces/decoded-token';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-main-content',
   standalone: true,
-  imports: [MatToolbarModule, MatIconModule, MatCardModule, NgxSpinnerModule, HeaderComponent],
+  imports: [
+    MatToolbarModule,
+    MatIconModule,
+    MatCardModule,
+    NgxSpinnerModule,
+    HeaderComponent,
+  ],
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.scss',
 })
