@@ -78,18 +78,20 @@ export class MainContentComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.spinner.show();
     const deviceInfo = this.deviceService.getDeviceInfo();
-    const myIp = await publicIpv4();
+    const accessedIp = await publicIpv4();
     const decodedToken = this.authService.decodeToken(
       this.authService.getToken()!
     ) as DecodedToken;
     const institutionId = decodedToken.data.credential.institution!.id!;
+    const directoryId = this.currentDirectory!.id;
 
     this.accessedFilesLogsService
       .createAccessedFileLog({
         accessedDevice: deviceInfo.os,
         accessedBrowser: deviceInfo.browser,
-        accessedIp: myIp,
-        institutionId: institutionId,
+        accessedIp,
+        institutionId,
+        directoryId
       })
       .subscribe({
         next: (_) => {
