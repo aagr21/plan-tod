@@ -83,7 +83,7 @@ export class MainContentComponent implements OnInit, OnDestroy {
       this.authService.getToken()!
     ) as DecodedToken;
     const institutionId = decodedToken.data.credential.institution!.id!;
-    const directoryId = this.currentDirectory!.id;
+    const directoryId = directory.id;
 
     this.accessedFilesLogsService
       .createAccessedFileLog({
