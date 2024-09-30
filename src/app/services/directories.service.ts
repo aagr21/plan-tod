@@ -104,4 +104,8 @@ export class DirectoriesService {
   findAll() {
     return this.http.get<Directory[]>(`${environment.apiBaseUrl}/directories`);
   }
+
+  findLogs(directory: Directory) {
+    return this.http.get<Directory>(`${environment.apiBaseUrl}/directories/find-logs/${directory.id}`);
+  }
 }

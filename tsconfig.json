@@ -26,6 +26,7 @@
       "@interceptors/*": ["./src/app/interceptors/*"],
       "@services/*": ["./src/app/services/*"],
       "@helpers/*": ["./src/app/helpers/*"],
+      "@directives/*": ["./src/app/directives/*"],
       "@models/*": ["./src/app/models/*"],
       "@environments/*": ["./src/environments/*"]
     }

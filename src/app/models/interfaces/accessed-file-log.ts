@@ -5,5 +5,6 @@ export interface AccessedFileLog {
     accessedDevice?:    string;
     accessedIp?:        string;
     accessedBrowser?:   string;
-    instituion?:        Institution;
+    institution?:       Institution;
+    accessedAt?:        Date;
 }

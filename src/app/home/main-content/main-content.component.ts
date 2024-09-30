@@ -12,6 +12,11 @@ import { AccessedFilesLogsService } from '@services/accessed-files-logs.service'
 import { publicIpv4 } from 'public-ip';
 import { AuthService } from '@services/auth.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import moment from 'moment';
 
 @Component({
   selector: 'app-main-content',
@@ -20,8 +25,10 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
     MatToolbarModule,
     MatIconModule,
     MatCardModule,
+    MatMenuModule,
     NgxSpinnerModule,
     HeaderComponent,
+    MatButtonModule,
   ],
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.scss',
@@ -91,7 +98,7 @@ export class MainContentComponent implements OnInit, OnDestroy {
         accessedBrowser: deviceInfo.browser,
         accessedIp,
         institutionId,
-        directoryId
+        directoryId,
       })
       .subscribe({
         next: (_) => {
@@ -106,7 +113,63 @@ export class MainContentComponent implements OnInit, OnDestroy {
       });
   }
 
+  viewHistory(file: Directory) {
+    this.isLoading = true;
+    this.spinner.show();
+    this.directoriesService.findLogs(file).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.spinner.hide();
+        const doc = new jsPDF();
+        doc.setLineHeightFactor(1.5);
+        doc.setFontSize(12);
+        doc.setFont(undefined!, 'bold');
+
+        // Agregar título al PDF
+        doc.text(response.name.split('.pdf')[0], 16, 16, {
+          maxWidth: 180,
+        });
+
+        const url = this.getUrl(file);
+
+        doc.textWithLink('Ver documento', 16, 33, {
+          url: `https://redirection-doc-pdf-plan-tod.vercel.app/api/redirection?link=${encodeURIComponent(url)}`,
+        });
+
+        // Crear la tabla
+        autoTable(doc, {
+          head: [
+            ['Institución', 'Dispositivo', 'Navegador', 'IP', 'Fecha y Hora'],
+          ],
+          body: response.accessedFilesLogs!.map((e) => [
+            e.institution!.name!,
+            e.accessedDevice!,
+            e.accessedBrowser!,
+            e.accessedIp!,
+            moment(e.accessedAt!).format('DD/MM/YYYY HH:mm:ss'),
+          ]),
+          startY: 40,
+        });
+
+        doc.save(
+          `Historial de accesos a ${file.name.split('.pdf')[0]} - ${moment(
+            Date.now()
+          ).format('DD/MM/YYYY HH:mm:ss')}.pdf`
+        );
+      },
+      error: (_) => {
+        console.clear();
+        this.isLoading = false;
+        this.spinner.hide();
+      },
+    });
+  }
+
   getUrl(directory: Directory) {
     return `mozilla.github.io/pdf.js/web/viewer.html?file=https://raw.githubusercontent.com/aagr21/tod-files/main/${this.directoriesService.pathCurrentDirectory}/${directory.name}`;
+  }
+
+  onRightClick() {
+    return false;
   }
 }
