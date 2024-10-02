@@ -1,17 +1,61 @@
 <!-- Barra superior -->
 <mat-toolbar color="primary" class="toolbar">
   @if(currentDirectory) {
-    <button mat-icon-button (click)="back()">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-  }
-  
-  <span class="spacer"></span>
-  <span>Plan TOD</span>
-  <span class="spacer"></span>
-  <button mat-icon-button aria-label="Search">
-    <mat-icon>search</mat-icon>
+  <button mat-icon-button (click)="back()">
+    <mat-icon>arrow_back</mat-icon>
   </button>
+  }
+
+  <span class="spacer"></span>
+  
+
+  <div class="flex justify-center items-center">
+    <img
+      style="height: 110px"
+      class="logo"
+      src="./assets/images/GAMSC-logo.png"
+      alt="Gobierno Autónomo Municipal de Santa Cruz de la Sierra"
+    />
+  </div>
+
+  <span class="spacer"></span>
+
+  <div class="flex justify-center items-center">
+    <img
+      style="height: 110px"
+      class="logo"
+      src="./assets/images/SMTT-logo.png"
+      alt="Secretaría Municipal de Tránsito y Transporte"
+    />
+  </div>
+
+  <span class="spacer"></span>
+  <span class="text-5xl font-normal font-sans">Plan TOD</span>
+  <span class="spacer"></span>
+
+  <div class="flex justify-center items-center">
+    <img
+      style="height: 115px"
+      class="logo"
+      src="./assets/images/JICA-logo.png"
+      alt="Secretaría Municipal de Planificación para el Desarrollo"
+    />
+  </div>
+  <span class="spacer"></span>
+  <div class="flex justify-center items-center">
+    <img
+      style="height: 115px"
+      class="logo"
+      src="./assets/images/SEMPLAD-logo.jpg"
+      alt="Secretaría Municipal de Planificación para el Desarrollo"
+    />
+  </div>
+
+  <span class="spacer"></span>
+
+  <!-- <button mat-icon-button aria-label="Search">
+    <mat-icon>search</mat-icon>
+  </button> -->
   &nbsp; &nbsp;
   <button mat-icon-button aria-label="Settings" [matMenuTriggerFor]="menu">
     <mat-icon>settings</mat-icon>
