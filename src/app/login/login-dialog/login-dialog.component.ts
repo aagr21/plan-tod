@@ -58,7 +58,7 @@ export class LoginDialogComponent {
         this.router.navigate(['']);
       },
       error: (_) => {
-        // console.clear();
+        console.clear();
         this.isLoading = false;
         this.openSnackBar('Credenciales Incorrectas', 'Aceptar');
       },
