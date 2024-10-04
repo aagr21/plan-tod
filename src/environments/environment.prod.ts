@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://plan-tod-api.adaptable.app/api',
+  apiBaseUrl: 'https://plan-tod-api.vercel.app/api',
 };
