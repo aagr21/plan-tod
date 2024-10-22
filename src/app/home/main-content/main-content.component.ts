@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HeaderComponent } from './header/header.component';
 import { Subscription } from 'rxjs';
-import { Directory, DecodedToken } from '@models/interfaces';
+import { Directory, DecodedToken, File } from '@models/interfaces';
 import { DirectoriesService } from '@services/directories.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { AccessedFilesLogsService } from '@services/accessed-files-logs.service';
@@ -70,47 +70,46 @@ export class MainContentComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-    this.directoriesService.setCurrentDirectoryParent(undefined!);
-    this.directoriesService.setCurrentDirectoryChild(undefined!);
     this.directoriesService.setCurrentDirectory(undefined!);
     this.directoriesService.setAllDirectories([]);
-    this.directoriesService.setListNavigateDirectories([]);
   }
 
   changeCurrentDirectory(currentDirectory: Directory) {
-    this.directoriesService.setCurrentDirectoryChild(currentDirectory);
+    this.directoriesService.addDirToNav(currentDirectory);
   }
 
   async viewFile(directory: Directory) {
-    this.isLoading = true;
-    this.spinner.show();
-    const deviceInfo = this.deviceService.getDeviceInfo();
-    const accessedIp = await publicIpv4();
-    const decodedToken = this.authService.decodeToken(
-      this.authService.getToken()!
-    ) as DecodedToken;
-    const institutionId = decodedToken.data.credential.institution!.id!;
-    const directoryId = directory.id;
+    // this.isLoading = true;
+    // this.spinner.show();
+    window.open(this.getUrl(directory), '_blank');
 
-    this.accessedFilesLogsService
-      .createAccessedFileLog({
-        accessedDevice: deviceInfo.os,
-        accessedBrowser: deviceInfo.browser,
-        accessedIp,
-        institutionId,
-        directoryId,
-      })
-      .subscribe({
-        next: (_) => {
-          this.isLoading = false;
-          this.spinner.hide();
-          window.open('//' + this.getUrl(directory), '_blank');
-        },
-        error: (_) => {
-          this.isLoading = false;
-          this.spinner.hide();
-        },
-      });
+    // const deviceInfo = this.deviceService.getDeviceInfo();
+    // const accessedIp = await publicIpv4();
+    // const decodedToken = this.authService.decodeToken(
+    //   this.authService.getToken()!
+    // ) as DecodedToken;
+    // const institutionId = decodedToken.data.credential.institution!.id!;
+    // const directoryId = directory.id!;
+
+    // this.accessedFilesLogsService
+    //   .createAccessedFileLog({
+    //     accessedDevice: deviceInfo.os,
+    //     accessedBrowser: deviceInfo.browser,
+    //     accessedIp,
+    //     institutionId,
+    //     directoryId,
+    //   })
+    //   .subscribe({
+    //     next: (_) => {
+    //       this.isLoading = false;
+    //       this.spinner.hide();
+    //       window.open('//' + this.getUrl(directory), '_blank');
+    //     },
+    //     error: (_) => {
+    //       this.isLoading = false;
+    //       this.spinner.hide();
+    //     },
+    //   });
   }
 
   viewHistory(file: Directory) {
@@ -126,14 +125,16 @@ export class MainContentComponent implements OnInit, OnDestroy {
         doc.setFont(undefined!, 'bold');
 
         // Agregar título al PDF
-        doc.text(response.name.split('.pdf')[0], 16, 16, {
+        doc.text(response.name!.split('.pdf')[0], 16, 16, {
           maxWidth: 180,
         });
 
         const url = this.getUrl(file);
 
         doc.textWithLink('Ver documento', 16, 33, {
-          url: `https://redirection-doc-pdf-plan-tod.vercel.app/api/redirection?link=${encodeURIComponent(url)}`,
+          url: `https://redirection-doc-pdf-plan-tod.vercel.app/api/redirection?link=${encodeURIComponent(
+            url
+          )}`,
         });
 
         // Crear la tabla
@@ -152,7 +153,7 @@ export class MainContentComponent implements OnInit, OnDestroy {
         });
 
         doc.save(
-          `Historial de accesos a ${file.name.split('.pdf')[0]} - ${moment(
+          `Historial de accesos a ${file.name!.split('.pdf')[0]} - ${moment(
             Date.now()
           ).format('DD/MM/YYYY HH:mm:ss')}.pdf`
         );
@@ -165,8 +166,15 @@ export class MainContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  getUrl(directory: Directory) {
-    return `mozilla.github.io/pdf.js/web/viewer.html?file=https://raw.githubusercontent.com/aagr21/tod-files/main/${this.directoriesService.pathCurrentDirectory}/${directory.name}`;
+  getUrl(file: File) {
+    // return `mozilla.github.io/pdf.js/web/viewer.html?file=https://raw.githubusercontent.com/aagr21/tod-files/main/${this.directoriesService.pathCurrentDirectory}/${directory.name}`;
+    const dirPath = this.directoriesService.path.replaceAll(
+      ' ',
+      '+'
+    );
+    const filePath = file.name!.replaceAll(' ', '+');
+    const completepPath = encodeURI(`https://plan-tod.s3.sa-east-1.amazonaws.com/${dirPath}/${filePath}`);
+    return completepPath;
   }
 
   onRightClick() {

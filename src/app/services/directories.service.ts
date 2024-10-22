@@ -10,6 +10,45 @@ import { BehaviorSubject } from 'rxjs';
 export class DirectoriesService {
   http = inject(HttpClient);
   private _currentDirectoryBS = new BehaviorSubject<Directory>(undefined!);
+  private _navigationDirectoryBS = new BehaviorSubject<Directory[]>([]);
+
+  get navigationDirectory() {
+    return this._navigationDirectoryBS.getValue();
+  }
+
+  get navigationDirectory$() {
+    return this._navigationDirectoryBS.asObservable();
+  }
+
+  get path() {
+    return this._navigationDirectoryBS
+      .getValue()
+      .map((element) => element.name)
+      .join('/');
+  }
+
+  addDirToNav(directory: Directory) {
+    const navDir = this._navigationDirectoryBS.getValue();
+    navDir.push(directory);
+    this._navigationDirectoryBS.next(navDir);
+    this._currentDirectoryBS.next(directory);
+  }
+
+  navToRoot() {
+    this._navigationDirectoryBS.next([]);
+    this._currentDirectoryBS.next(undefined!);
+  }
+
+  removeDirToNav() {
+    const navDir = this._navigationDirectoryBS.getValue();
+    navDir.pop()!;
+
+    // Actualizamos el BehaviorSubject con el nuevo array
+    this._navigationDirectoryBS.next(navDir);
+
+    const currentDir = navDir[navDir.length - 1];
+    this._currentDirectoryBS.next(currentDir!);
+  }
 
   get currentDirectory$() {
     return this._currentDirectoryBS.asObservable();
@@ -20,75 +59,7 @@ export class DirectoriesService {
   }
 
   setCurrentDirectory(directory: Directory) {
-    this._currentDirectoryBS.next(undefined!);
-  }
-
-  setCurrentDirectoryChild(currentDirectory: Directory) {
-    this._listNavigateDirectoriesBS.next([
-      ...this._listNavigateDirectoriesBS.getValue(),
-      this.currentDirectory,
-    ]);
-    this._currentDirectoryBS.next(currentDirectory);
-    if (!this._currentDirectoryBS.getValue()) {
-      this._pathCurrentDirectoryBS.next(undefined!);
-      return;
-    }
-    if (!this._pathCurrentDirectoryBS.getValue()) {
-      this._pathCurrentDirectoryBS.next(currentDirectory.name);
-    } else {
-      this._pathCurrentDirectoryBS.next(
-        `${this._pathCurrentDirectoryBS.getValue()}/${currentDirectory.name}`
-      );
-    }
-  }
-
-  setCurrentDirectoryParent(currentDirectory: Directory) {
-    this._currentDirectoryBS.next(currentDirectory);
-    if (!this._currentDirectoryBS.getValue()) {
-      this._pathCurrentDirectoryBS.next(undefined!);
-      return;
-    }
-    this._pathCurrentDirectoryBS.next(currentDirectory.name);
-  }
-
-  private _listNavigateDirectoriesBS = new BehaviorSubject<Directory[]>([]);
-
-  get listNavigateDirectories$() {
-    return this._listNavigateDirectoriesBS.asObservable();
-  }
-
-  get listNavigateDirectories() {
-    return this._listNavigateDirectoriesBS.getValue();
-  }
-
-  setListNavigateDirectories(directories: Directory[]) {
-    this._listNavigateDirectoriesBS.next(directories);
-  }
-
-  popListNavigateDirectories() {
-    const directory = this.listNavigateDirectories.pop();
-    this._listNavigateDirectoriesBS.next(this.listNavigateDirectories);
-    return directory;
-  }
-
-  private _parentDirectoryBS = new BehaviorSubject<Directory>(undefined!);
-
-  get parentDirectory$() {
-    return this._parentDirectoryBS.asObservable();
-  }
-
-  get parentDirectory() {
-    return this._parentDirectoryBS.getValue();
-  }
-
-  setParentDirectory(directory: Directory) {
-    this._parentDirectoryBS.next(directory);
-  }
-
-  private _pathCurrentDirectoryBS = new BehaviorSubject<string>(undefined!);
-
-  get pathCurrentDirectory() {
-    return this._pathCurrentDirectoryBS.getValue();
+    this._currentDirectoryBS.next(directory!);
   }
 
   private _allDirectoriesBS = new BehaviorSubject<Directory[]>([]);
@@ -106,6 +77,8 @@ export class DirectoriesService {
   }
 
   findLogs(directory: Directory) {
-    return this.http.get<Directory>(`${environment.apiBaseUrl}/directories/find-logs/${directory.id}`);
+    return this.http.get<Directory>(
+      `${environment.apiBaseUrl}/directories/find-logs/${directory.id}`
+    );
   }
 }

@@ -30,8 +30,7 @@ export class HeaderComponent implements OnInit {
   }
 
   back() {
-    const directory = this.directoriesService.popListNavigateDirectories();
-    this.directoriesService.setCurrentDirectoryParent(directory!);
+    this.directoriesService.removeDirToNav();
   }
 
   singOut() {

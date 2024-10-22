@@ -14,7 +14,8 @@ export class SidebarComponent {
   directoriesService = inject(DirectoriesService);
 
   selectDocuments() {
-    this.directoriesService.setCurrentDirectoryChild(undefined!);
-    this.directoriesService.setListNavigateDirectories([]);
+    // this.directoriesService.setCurrentDirectoryChild(undefined!);
+    // this.directoriesService.setListNavigateDirectories([]);
+    this.directoriesService.navToRoot();
   }
 }

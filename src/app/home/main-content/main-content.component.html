@@ -11,70 +11,49 @@
     child) {
     <mat-card
       class="file-card select-none mx-9 my-2"
-      (click)="!child.isFile ? changeCurrentDirectory(child) : viewFile(child)"
+      (click)="changeCurrentDirectory(child)"
     >
       <mat-card-content>
         <div class="flex items-center justify-between">
           <div class="flex items-center">
-            <mat-icon>{{ child.isFile ? "picture_as_pdf" : "folder" }}</mat-icon
-            >&nbsp;
-            <span class="{{ child.isFile ? 'truncate-text' : '' }}">{{
-              child.name
-            }}</span>
+            <mat-icon>folder</mat-icon>&nbsp;
+            <span>{{ child.name }}</span>
           </div>
-          @if (child.isFile) {
-            <button
-              mat-icon-button
-              [matMenuTriggerFor]="menu"
-              (click)="$event.stopPropagation()"
-            >
-              <mat-icon>more_vert</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    } @for (file of currentDirectory.files; track $index) {
+    <mat-card class="file-card select-none mx-9 my-2" (click)="viewFile(file)">
+      <mat-card-content>
+        <div class="flex items-center">
+          <mat-icon>file_present</mat-icon>&nbsp;
+          <span class="truncate-text">{{ file.name }}</span>
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            (click)="$event.stopPropagation()"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <!-- Menú de opciones -->
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="viewHistory(file)">
+              <mat-icon>history</mat-icon>
+              <span>Ver historial de vistas</span>
             </button>
-            <!-- Menú de opciones -->
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="viewHistory(child)">
-                <mat-icon>history</mat-icon>
-                <span>Ver historial de vistas</span>
-              </button>
-            </mat-menu>
-          }
+          </mat-menu>
         </div>
       </mat-card-content>
     </mat-card>
     } } @else { @for(directory of allDirectories; track directory) {
     <mat-card
       class="file-card select-none mx-9 my-2"
-      (click)="
-        !directory.isFile
-          ? changeCurrentDirectory(directory)
-          : viewFile(directory)
-      "
+      (click)="changeCurrentDirectory(directory)"
     >
       <mat-card-content>
         <div class="flex items-center">
-          <mat-icon>{{
-            directory.isFile ? "picture_as_pdf" : "folder"
-          }}</mat-icon
-          >&nbsp;
-          <span class="{{ directory.isFile ? 'truncate-text' : '' }}">{{
-            directory.name
-          }}</span>
-          @if (directory.isFile) {
-            <button
-              mat-icon-button
-              [matMenuTriggerFor]="menu"
-              (click)="$event.stopPropagation()"
-            >
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <!-- Menú de opciones -->
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="viewHistory(directory)">
-                <mat-icon>history</mat-icon>
-                <span>Ver historial de vistas</span>
-              </button>
-            </mat-menu>
-          }
+          <mat-icon>folder</mat-icon>&nbsp;
+          <span>{{ directory.name }}</span>
         </div>
       </mat-card-content>
     </mat-card>
